@@ -51,7 +51,7 @@ namespace GerenciadorDeContas.ContasBancarias.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ExistCliente(long id)
+        public async Task<bool> AnyByIdAsync(long id)
         {
             return await _context.Clientes.AnyAsync(x => x.Id == id);
         }

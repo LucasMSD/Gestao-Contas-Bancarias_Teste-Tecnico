@@ -6,17 +6,17 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ClienteController : ControllerBase
+    public class EnderecoController : ControllerBase
     {
-        private IClienteService _service;
+        private readonly IEnderecoService _service;
 
-        public ClienteController(IClienteService service)
+        public EnderecoController(IEnderecoService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> FindAll()
         {
             var result = await _service.FindAllAsync();
 
@@ -28,8 +28,8 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
             return Ok(result.Value);
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(long id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindById(long id)
         {
             var result = await _service.FindByIdAsync(id);
 
@@ -42,22 +42,22 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateClienteDto createClienteDto)
+        public async Task<IActionResult> Create([FromBody] CreateEnderecoDto createEnderecoDto)
         {
-            var result = await _service.CreateAsync(createClienteDto);
+            var result = await _service.CreateAsync(createEnderecoDto);
 
             if (result.IsFailed)
             {
                 return BadRequest();
             }
 
-            return CreatedAtAction(nameof(GetById), new { Id = result.Value.Id }, result.Value);
+            return CreatedAtAction(nameof(FindById), new { result.Value.Id }, result.Value);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateClienteDto updateClienteDto)
+        public async Task<IActionResult> Update([FromBody] UpdateEnderecoDto updateEnderecoDto)
         {
-            var result = await _service.UpdateAsync(updateClienteDto);
+            var result = await _service.UpdateAsync(updateEnderecoDto);
 
             if (result.IsFailed)
             {

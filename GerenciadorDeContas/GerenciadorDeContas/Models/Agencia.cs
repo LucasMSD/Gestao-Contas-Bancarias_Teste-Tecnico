@@ -7,6 +7,7 @@ namespace GerenciadorDeContas.ContasBancarias.Models
         [Key]
         [Required]
         public long Id { get; set; }
+        [Required]
         public long Numero { get; set; }
         [Required]
         public long EnderecoId { get; set; }

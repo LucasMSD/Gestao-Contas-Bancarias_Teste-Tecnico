@@ -27,7 +27,7 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
 
         public async Task<Result> DeleteAsync(long id)
         {
-            if (!await _repository.ExistCliente(id))
+            if (!await _repository.AnyByIdAsync(id))
             {
                 return Result.Fail("Cliente não encontrado.");
             }
@@ -39,12 +39,19 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
 
         public async Task<Result<List<ReadClienteDto>>> FindAllAsync()
         {
-            return Result.Ok(_mapper.Map<List<ReadClienteDto>>(await _repository.FindAllAsync()));
+            var clientes = await _repository.FindAllAsync();
+
+            if (!clientes.Any())
+            {
+                return Result.Fail("");
+            }
+
+            return Result.Ok(_mapper.Map<List<ReadClienteDto>>(clientes));
         }
 
         public async Task<Result<ReadClienteDto>> FindByIdAsync(long id)
         {
-            if (await _repository.ExistCliente(id))
+            if (await _repository.AnyByIdAsync(id))
             {
                 var cliente = await _repository.FindByIdAsync(id);
 
@@ -56,7 +63,7 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
 
         public async Task<Result> UpdateAsync(UpdateClienteDto updateClienteDto)
         {
-            if (await _repository.ExistCliente(updateClienteDto.Id))
+            if (await _repository.AnyByIdAsync(updateClienteDto.Id))
             {
                 var cliente = _mapper.Map<Cliente>(updateClienteDto);
 

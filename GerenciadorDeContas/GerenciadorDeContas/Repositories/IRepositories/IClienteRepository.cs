@@ -9,6 +9,6 @@ namespace GerenciadorDeContas.ContasBancarias.Repositories.IRepositories
         Task<Cliente> CreateAsync(Cliente cliente);
         Task UpdateAsync(Cliente cliente);
         Task DeleteAsync(long id);
-        Task<bool> ExistCliente(long id);
+        Task<bool> AnyByIdAsync(long id);
     }
 }
