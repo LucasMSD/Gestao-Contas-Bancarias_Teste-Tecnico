@@ -42,7 +42,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(CreateAgenciaDto createAgenciaDto)
+        public async Task<IActionResult> Post([FromBody] CreateAgenciaDto createAgenciaDto)
         {
             var result = await _agenciaService.CreateAsync(createAgenciaDto);
 
@@ -55,7 +55,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateAgenciaDto updateAgenciaDto)
+        public async Task<IActionResult> Update([FromBody] UpdateAgenciaDto updateAgenciaDto)
         {
             var result = await _agenciaService.UpdateAsync(updateAgenciaDto);
 
