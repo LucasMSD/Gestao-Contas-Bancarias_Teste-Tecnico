@@ -9,12 +9,10 @@ namespace GerenciadorDeContas.ContasBancarias.Repositories.Implementations
     public class ClienteRepository : IClienteRepository
     {
         private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
 
-        public ClienteRepository(AppDbContext context, IMapper mapper)
+        public ClienteRepository(AppDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<Cliente> CreateAsync(Cliente cliente)
@@ -38,16 +36,12 @@ namespace GerenciadorDeContas.ContasBancarias.Repositories.Implementations
 
         public async Task<Cliente> FindByIdAsync(long id)
         {
-            var cliente = await _context.Clientes.Where(x => x.Id == id).FirstOrDefaultAsync();
-
-            return cliente;
+            return await _context.Clientes.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task UpdateAsync(Cliente cliente)
         {
-            var clienteBanco = await _context.Clientes.Where(x => x.Id == cliente.Id).FirstOrDefaultAsync();
-
-            _mapper.Map(cliente, clienteBanco);
+            _context.Clientes.Update(cliente);
             await _context.SaveChangesAsync();
         }
 

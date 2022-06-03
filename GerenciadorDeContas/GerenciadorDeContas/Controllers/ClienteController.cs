@@ -8,17 +8,17 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
     [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
-        private IClienteService _service;
+        private IClienteService _clienteService;
 
-        public ClienteController(IClienteService service)
+        public ClienteController(IClienteService clienteService)
         {
-            _service = service;
+            _clienteService = clienteService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _service.FindAllAsync();
+            var result = await _clienteService.FindAllAsync();
 
             if (result.IsFailed)
             {
@@ -29,9 +29,9 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            var result = await _service.FindByIdAsync(id);
+            var result = await _clienteService.FindByIdAsync(id);
 
             if (result.IsFailed)
             {
@@ -44,24 +44,24 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateClienteDto createClienteDto)
         {
-            var result = await _service.CreateAsync(createClienteDto);
+            var result = await _clienteService.CreateAsync(createClienteDto);
 
             if (result.IsFailed)
             {
-                return BadRequest();
+                return BadRequest(result.Errors);
             }
 
-            return CreatedAtAction(nameof(GetById), new { Id = result.Value.Id }, result.Value);
+            return CreatedAtAction(nameof(Get), new { Id = result.Value.Id }, result.Value);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateClienteDto updateClienteDto)
         {
-            var result = await _service.UpdateAsync(updateClienteDto);
+            var result = await _clienteService.UpdateAsync(updateClienteDto);
 
             if (result.IsFailed)
             {
-                return NotFound();
+                return BadRequest(result.Errors);
             }
 
             return NoContent();
@@ -70,11 +70,11 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = await _service.DeleteAsync(id);
+            var result = await _clienteService.DeleteAsync(id);
 
             if (result.IsFailed)
             {
-                return NotFound();
+                return BadRequest(result.Errors);
             }
 
             return NoContent();

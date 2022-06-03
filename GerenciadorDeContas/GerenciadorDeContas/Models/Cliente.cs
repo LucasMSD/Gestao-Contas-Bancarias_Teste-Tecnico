@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GerenciadorDeContas.ContasBancarias.Models
 {
@@ -13,6 +14,7 @@ namespace GerenciadorDeContas.ContasBancarias.Models
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [JsonIgnore]
         public virtual List<Conta> Contas { get; set; }
     }
 }
