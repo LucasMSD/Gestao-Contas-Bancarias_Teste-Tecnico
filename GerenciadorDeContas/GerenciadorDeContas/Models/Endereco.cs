@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GerenciadorDeContas.ContasBancarias.Models
 {
@@ -18,7 +19,7 @@ namespace GerenciadorDeContas.ContasBancarias.Models
         [Required]
         [StringLength(2)]
         public string UF { get; set; }
-
+        [JsonIgnore]
         public virtual Agencia Agencia { get; set; }
     }
 }
