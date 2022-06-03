@@ -48,7 +48,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(result.Errors.FirstOrDefault());
             }
 
             return CreatedAtAction(nameof(Get), new { Id = result.Value.Id}, result.Value);
@@ -61,7 +61,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(result.Errors.FirstOrDefault());
             }
 
             return NoContent();
@@ -74,7 +74,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(result.Errors.FirstOrDefault());
             }
 
             return NoContent();
