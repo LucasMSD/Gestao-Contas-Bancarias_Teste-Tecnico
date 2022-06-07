@@ -26,11 +26,22 @@ namespace GerenciadorDeContas.ContasBancarias.Data
                    .HasOne(conta => conta.Agencia)
                    .WithMany(agencia => agencia.Contas)
                    .HasForeignKey(conta => conta.AgenciaId);
+
+            builder.Entity<Movimentacao>()
+                   .HasOne(movimentacao => movimentacao.ContaDestino)
+                   .WithMany(contaDestino => contaDestino.Movimentacoes)
+                   .HasForeignKey(movimentacao => movimentacao.ContaDestinoId);
+
+            builder.Entity<Movimentacao>()
+                   .HasOne(movimentacao => movimentacao.ContaOrigem)
+                   .WithMany(contaOrigem => contaOrigem.Movimentacoes)
+                   .HasForeignKey(movimentacao => movimentacao.ContaOrigemId);
         }
 
         public DbSet<Agencia> Agencias { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Conta> Contas { get; set; }
         public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<Movimentacao> Movimentacoes { get; set; }
     }
 }

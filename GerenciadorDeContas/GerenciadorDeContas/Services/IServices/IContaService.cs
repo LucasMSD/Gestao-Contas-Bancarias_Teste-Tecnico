@@ -10,5 +10,6 @@ namespace GerenciadorDeContas.ContasBancarias.Services.IServices
         Task<Result<ReadContaDto>> CreateAsync(CreateContaDto createContaDto);
         Task<Result> UpdateAsync(UpdateContaDto updateContaDto);
         Task<Result> DeleteAsync(long id);
+        Task<Result> Deposit(CreateMovimentacaoDto createMovimentacaoDto);
     }
 }

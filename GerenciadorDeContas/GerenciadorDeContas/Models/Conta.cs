@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GerenciadorDeContas.ContasBancarias.Models
 {
@@ -15,5 +16,7 @@ namespace GerenciadorDeContas.ContasBancarias.Models
         [Required]
         public long ClienteId { get; set; }
         public virtual Cliente Cliente { get; set; }
+        [JsonIgnore]
+        public virtual List<Movimentacao> Movimentacoes { get; set; }
     }
 }

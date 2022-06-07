@@ -55,7 +55,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] UpdateContaDto updateContaDto)
+        public async Task<IActionResult> Update([FromBody] UpdateContaDto updateContaDto)
         {
             var result = await _contaService.UpdateAsync(updateContaDto);
 
@@ -78,6 +78,19 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost("deposito")]
+        public async Task<IActionResult> Deposit([FromBody] CreateMovimentacaoDto createMovimentacaoDto)
+        {
+            var result = await _contaService.Deposit(createMovimentacaoDto);
+
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok();
         }
     }
 }

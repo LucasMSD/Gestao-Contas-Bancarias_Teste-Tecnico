@@ -51,6 +51,11 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             return Result.Ok();
         }
 
+        public Task<Result> Deposit(CreateMovimentacaoDto createMovimentacaoDto)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Result<List<ReadContaDto>>> FindAllAsync()
         {
             var contas = await _contaRepository.FindAllAsync();
