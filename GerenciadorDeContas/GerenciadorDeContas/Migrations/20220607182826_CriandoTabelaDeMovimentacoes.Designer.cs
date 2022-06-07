@@ -3,6 +3,7 @@ using System;
 using GerenciadorDeContas.ContasBancarias.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorDeContas.ContasBancarias.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220607182826_CriandoTabelaDeMovimentacoes")]
+    partial class CriandoTabelaDeMovimentacoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,12 +126,14 @@ namespace GerenciadorDeContas.ContasBancarias.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ContaDestinoId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ContaDestinoNumero")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ContaOrigemId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ContaOrigemNumero")
@@ -187,11 +191,15 @@ namespace GerenciadorDeContas.ContasBancarias.Migrations
                 {
                     b.HasOne("GerenciadorDeContas.ContasBancarias.Models.Conta", "ContaDestino")
                         .WithMany("MovimentacoesEntrada")
-                        .HasForeignKey("ContaDestinoId");
+                        .HasForeignKey("ContaDestinoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GerenciadorDeContas.ContasBancarias.Models.Conta", "ContaOrigem")
                         .WithMany("MovimentacoesSaida")
-                        .HasForeignKey("ContaOrigemId");
+                        .HasForeignKey("ContaOrigemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ContaDestino");
 

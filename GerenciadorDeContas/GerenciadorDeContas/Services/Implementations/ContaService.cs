@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using GerenciadorDeContas.ContasBancarias.Data.Dtos;
+using GerenciadorDeContas.ContasBancarias.Enums;
 using GerenciadorDeContas.ContasBancarias.Models;
 using GerenciadorDeContas.ContasBancarias.Repositories.IRepositories;
 using GerenciadorDeContas.ContasBancarias.Services.IServices;
@@ -51,9 +52,38 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             return Result.Ok();
         }
 
-        public Task<Result> Deposit(CreateMovimentacaoDto createMovimentacaoDto)
+        public async Task<Result<DepositResponse>> DepositAsync(DepositRequest depositRequest)
         {
-            throw new NotImplementedException();
+            var result = new Result();
+
+            var saldoAnterior = await _contaRepository.GetBalanceByNumberAsync(depositRequest.ContaDestinoNumero);
+
+            if (!await _contaRepository.AnyByNumberAsync(depositRequest.ContaDestinoNumero))
+            {
+                result.WithError("Conta para depósito não existe");
+            }
+
+            if (depositRequest.Valor <= 0)
+            {
+                result.WithError("Valor de depósito não pode ser menor ou igual a zero.");
+            }
+
+            var movimentacao = _mapper.Map<Movimentacao>(depositRequest);
+
+            var contaDestino = await _contaRepository.FindByNumberAsync(depositRequest.ContaDestinoNumero);
+
+            movimentacao.ContaDestinoId = contaDestino.Id;
+            movimentacao.TipoMovimentacao = TipoMovimentacao.Deposito;
+            movimentacao.Horario = DateTime.Now;
+
+            var saldoAtual = await _contaRepository.DepositAsync(movimentacao);
+
+            return Result.Ok(new DepositResponse
+            {
+                Numero = depositRequest.ContaDestinoNumero,
+                SaldoAnterior = saldoAnterior,
+                SaldoAtual = saldoAtual
+            });
         }
 
         public async Task<Result<List<ReadContaDto>>> FindAllAsync()

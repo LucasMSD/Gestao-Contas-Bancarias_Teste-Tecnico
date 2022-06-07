@@ -8,19 +8,16 @@ namespace GerenciadorDeContas.ContasBancarias.Models
         [Key]
         [Required]
         public long Id { get; set; }
-        [Required]
-        public long ContaDestinoId { get; set; }
-        [Required]
-        public long ContaDestinoNumero { get; set; }
+        public long? ContaDestinoId { get; set; }
+        public long? ContaDestinoNumero { get; set; }
         public virtual Conta ContaDestino { get; set; }
-        [Required]
-        public long ContaOrigemId { get; set; }
-        [Required]
-        public long ContaOrigemNumero { get; set; }
+        public long? ContaOrigemId { get; set; }
+        public long? ContaOrigemNumero { get; set; }
         public virtual Conta ContaOrigem { get; set; }
         [Required]
         public decimal Valor { get; set; }
         [Required]
+        [EnumDataType(typeof(TipoMovimentacao))]
         public TipoMovimentacao TipoMovimentacao { get; set; }
         [Required]
         public DateTime Horario { get; set; }

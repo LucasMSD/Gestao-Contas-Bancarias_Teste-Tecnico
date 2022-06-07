@@ -29,13 +29,15 @@ namespace GerenciadorDeContas.ContasBancarias.Data
 
             builder.Entity<Movimentacao>()
                    .HasOne(movimentacao => movimentacao.ContaDestino)
-                   .WithMany(contaDestino => contaDestino.Movimentacoes)
-                   .HasForeignKey(movimentacao => movimentacao.ContaDestinoId);
+                   .WithMany(contaDestino => contaDestino.MovimentacoesEntrada)
+                   .HasForeignKey(movimentacao => movimentacao.ContaDestinoId)
+                   .IsRequired(false);
 
             builder.Entity<Movimentacao>()
                    .HasOne(movimentacao => movimentacao.ContaOrigem)
-                   .WithMany(contaOrigem => contaOrigem.Movimentacoes)
-                   .HasForeignKey(movimentacao => movimentacao.ContaOrigemId);
+                   .WithMany(contaOrigem => contaOrigem.MovimentacoesSaida)
+                   .HasForeignKey(movimentacao => movimentacao.ContaOrigemId)
+                   .IsRequired(false);
         }
 
         public DbSet<Agencia> Agencias { get; set; }

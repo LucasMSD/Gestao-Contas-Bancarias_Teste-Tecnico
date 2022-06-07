@@ -81,9 +81,9 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         }
 
         [HttpPost("deposito")]
-        public async Task<IActionResult> Deposit([FromBody] CreateMovimentacaoDto createMovimentacaoDto)
+        public async Task<IActionResult> Deposit([FromBody] DepositRequest depositRequest)
         {
-            var result = await _contaService.Deposit(createMovimentacaoDto);
+            var result = await _contaService.DepositAsync(depositRequest);
 
             if (result.IsFailed)
             {

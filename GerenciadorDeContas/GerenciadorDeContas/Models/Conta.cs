@@ -17,6 +17,8 @@ namespace GerenciadorDeContas.ContasBancarias.Models
         public long ClienteId { get; set; }
         public virtual Cliente Cliente { get; set; }
         [JsonIgnore]
-        public virtual List<Movimentacao> Movimentacoes { get; set; }
+        public virtual List<Movimentacao> MovimentacoesEntrada { get; set; }
+        [JsonIgnore]
+        public virtual List<Movimentacao> MovimentacoesSaida { get; set; }
     }
 }
