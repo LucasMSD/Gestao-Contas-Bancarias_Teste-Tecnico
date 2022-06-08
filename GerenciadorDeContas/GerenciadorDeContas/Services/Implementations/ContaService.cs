@@ -108,6 +108,16 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             return Result.Ok(_mapper.Map<ReadContaDto>(await _contaRepository.FindByIdAsync(id)));
         }
 
+        public async Task<Result<decimal>> GetBalance(int accountNumber)
+        {
+            if (!await _contaRepository.AnyByNumberAsync(accountNumber))
+            {
+                return Result.Fail("Conta não existe");
+            }
+
+            return Result.Ok(await _contaRepository.GetBalanceByNumberAsync(accountNumber));
+        }
+
         public async Task<Result> UpdateAsync(UpdateContaDto updateContaDto)
         {
             if (!await _contaRepository.AnyByIdAsync(updateContaDto.Id))

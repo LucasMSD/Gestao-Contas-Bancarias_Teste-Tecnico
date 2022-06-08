@@ -80,6 +80,20 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
             return NoContent();
         }
 
+        [HttpGet("saldo/{accountNumber}")]
+        public async Task<IActionResult> GetBalance(int accountNumber)
+        {
+            var result = await _contaService.GetBalance(accountNumber);
+
+            if (result.IsFailed)
+            {
+                return NotFound(result.Errors.FirstOrDefault());
+            }
+
+            return Ok(result.Value);
+        }
+
+
         [HttpPost("deposito")]
         public async Task<IActionResult> Deposit([FromBody] DepositRequest depositRequest)
         {
