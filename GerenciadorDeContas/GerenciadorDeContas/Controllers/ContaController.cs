@@ -48,7 +48,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors.FirstOrDefault());
+                return BadRequest(result.Reasons);
             }
 
             return CreatedAtAction(nameof(Get), new { Id = result.Value.Id }, result.Value);
@@ -61,7 +61,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors.FirstOrDefault());
+                return BadRequest(result.Reasons);
             }
 
             return NoContent();
@@ -74,7 +74,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors.FirstOrDefault());
+                return BadRequest(result.Reasons);
             }
 
             return NoContent();
@@ -87,7 +87,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return NotFound(result.Errors.FirstOrDefault());
+                return NotFound(result.Reasons);
             }
 
             return Ok(result.Value);
@@ -101,10 +101,10 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(result.Reasons);
             }
 
-            return Ok();
+            return Ok(result.Value);
         }
 
         [HttpPost("saque")]
@@ -114,7 +114,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(result.Reasons);
             }
 
             return Ok(result.Value);
