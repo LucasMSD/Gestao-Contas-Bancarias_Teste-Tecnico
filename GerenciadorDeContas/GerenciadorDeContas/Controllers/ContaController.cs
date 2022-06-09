@@ -131,5 +131,18 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
 
             return Ok(result.Value);
         }
+
+        [HttpGet("{accountNumber}/extrato")]
+        public async Task<IActionResult> GetStatement(int accountNumber)
+        {
+            var result = await _contaService.GetStatementAsync(accountNumber);
+
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Reasons);
+            }
+
+            return Ok(result.Value);
+        }
     }
 }

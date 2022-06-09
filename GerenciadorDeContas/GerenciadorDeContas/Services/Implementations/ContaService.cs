@@ -123,6 +123,27 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             return Result.Ok(await _contaRepository.GetBalanceByNumberAsync(accountNumber));
         }
 
+        public async Task<Result<List<ExtratoDto>>> GetStatementAsync(int accountNumber)
+        {
+            if (!await _contaRepository.AnyByNumberAsync(accountNumber))
+            {
+                return Result.Fail("Conta não existe");
+            }
+
+            var conta = await _contaRepository.FindByNumberAsync(accountNumber);
+
+            var movimentacoes = new List<Movimentacao>();
+
+            movimentacoes.AddRange(conta.MovimentacoesEntrada);
+            movimentacoes.AddRange(conta.MovimentacoesSaida);
+
+            movimentacoes.Sort((x, y) => x.Horario > y.Horario ? 1 : -1);
+
+            var extrato = _mapper.Map<List<ExtratoDto>>(movimentacoes);
+
+            return Result.Ok(extrato);
+        }
+
         public async Task<Result<TransferResponse>> TrasnferAsync(TransferRequest transferRequest)
         {
             var result = new Result();
