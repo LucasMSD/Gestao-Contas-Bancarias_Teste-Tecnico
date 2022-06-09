@@ -18,5 +18,6 @@ namespace GerenciadorDeContas.ContasBancarias.Repositories.IRepositories
         Task<List<Movimentacao>> GetMovimentacaosByAccountNumberAsync(long accountNumber);
         Task<List<Movimentacao>> GetMovimentacaosByAccountIdAsync(long accountId);
         Task<decimal> WithDrawAsync(Movimentacao movimentacao);
+        Task<decimal> TransferAsync(Movimentacao movimentacao);
     }
 }

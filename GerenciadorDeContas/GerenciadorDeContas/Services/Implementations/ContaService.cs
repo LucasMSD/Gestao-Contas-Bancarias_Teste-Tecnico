@@ -123,6 +123,56 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             return Result.Ok(await _contaRepository.GetBalanceByNumberAsync(accountNumber));
         }
 
+        public async Task<Result<TransferResponse>> TrasnferAsync(TransferRequest transferRequest)
+        {
+            var result = new Result();
+            var saldoAnterior = await _contaRepository.GetBalanceByNumberAsync(transferRequest.ContaOrigemNumero);
+
+            if (!await _contaRepository.AnyByNumberAsync(transferRequest.ContaOrigemNumero))
+            {
+                result.WithError("Conta de origem não existe.");
+            }
+
+            if (!await _contaRepository.AnyByNumberAsync(transferRequest.ContaDestinoNumero))
+            {
+                result.WithError("Conta de destino não existe.");
+            }
+
+            if (transferRequest.Valor <= 0)
+            {
+                result.WithError("Valor para transferência não pode ser menor ou igual a zero.");
+            }
+
+            if (transferRequest.Valor > saldoAnterior)
+            {
+                result.WithError("Valor para tranferência é maior do que o saldo disponível.");
+            }
+
+            if (result.HasError<IError>())
+            {
+                return result;
+            }
+
+            var movimentacao = _mapper.Map<Movimentacao>(transferRequest);
+
+            var contaOrigem = await _contaRepository.FindByNumberAsync((long)movimentacao.ContaOrigemNumero);
+            var contaDestino = await _contaRepository.FindByNumberAsync((long)movimentacao.ContaDestinoNumero);
+
+            movimentacao.ContaOrigemId = contaOrigem.Id;
+            movimentacao.ContaDestinoId = contaDestino.Id;
+            movimentacao.TipoMovimentacao = TipoMovimentacao.Transacao;
+            movimentacao.Horario = DateTime.Now;
+
+            var saldoAtual = await _contaRepository.TransferAsync(movimentacao);
+
+            return Result.Ok(new TransferResponse
+            {
+                Numero = contaOrigem.Numero,
+                SaldoAnterior = saldoAnterior,
+                SaldoAtual = saldoAtual,
+            });
+        }
+
         public async Task<Result> UpdateAsync(UpdateContaDto updateContaDto)
         {
             if (!await _contaRepository.AnyByIdAsync(updateContaDto.Id))

@@ -13,5 +13,6 @@ namespace GerenciadorDeContas.ContasBancarias.Services.IServices
         Task<Result<DepositResponse>> DepositAsync(DepositRequest depositRequest);
         Task<Result<decimal>> GetBalanceByAccountNumberAsync(int accountNumber);
         Task<Result<WithDrawResponse>> WithDrawAsync(WithDrawRequest withDrawRequest);
+        Task<Result<TransferResponse>> TrasnferAsync(TransferRequest transferRequest);
     }
 }

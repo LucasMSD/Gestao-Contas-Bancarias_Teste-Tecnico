@@ -93,7 +93,6 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
             return Ok(result.Value);
         }
 
-
         [HttpPost("deposito")]
         public async Task<IActionResult> Deposit([FromBody] DepositRequest depositRequest)
         {
@@ -111,6 +110,19 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         public async Task<IActionResult> WithDraw([FromBody] WithDrawRequest withDrawRequest)
         {
             var result = await _contaService.WithDrawAsync(withDrawRequest);
+
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Reasons);
+            }
+
+            return Ok(result.Value);
+        }
+
+        [HttpPost("transferencia")]
+        public async Task<IActionResult> Transfer([FromBody] TransferRequest transferRequest)
+        {
+            var result = await _contaService.TrasnferAsync(transferRequest);
 
             if (result.IsFailed)
             {

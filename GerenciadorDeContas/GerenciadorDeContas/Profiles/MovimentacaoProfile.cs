@@ -10,6 +10,7 @@ namespace GerenciadorDeContas.ContasBancarias.Profiles
         {
             CreateMap<DepositRequest, Movimentacao>();
             CreateMap<WithDrawRequest, Movimentacao>();
+            CreateMap<TransferRequest, Movimentacao>();
         }
     }
 }

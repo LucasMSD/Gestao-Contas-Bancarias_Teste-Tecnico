@@ -122,5 +122,13 @@ namespace GerenciadorDeContas.ContasBancarias.Repositories.Implementations
 
             return await GetBalanceByNumberAsync((long)movimentacao.ContaOrigemNumero);
         }
+
+        public async Task<decimal> TransferAsync(Movimentacao movimentacao)
+        {
+            _context.Movimentacoes.Add(movimentacao);
+            await _context.SaveChangesAsync();
+
+            return await GetBalanceByNumberAsync((long)movimentacao.ContaOrigemNumero);
+        }
     }
 }
