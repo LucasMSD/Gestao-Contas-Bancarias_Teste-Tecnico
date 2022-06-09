@@ -68,6 +68,11 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
                 result.WithError("Valor de depósito não pode ser menor ou igual a zero.");
             }
 
+            if (result.HasError<IError>())
+            {
+                return result;
+            }
+
             var movimentacao = _mapper.Map<Movimentacao>(depositRequest);
 
             var contaDestino = await _contaRepository.FindByNumberAsync(depositRequest.ContaDestinoNumero);
