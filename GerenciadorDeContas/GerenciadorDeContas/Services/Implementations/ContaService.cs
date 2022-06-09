@@ -108,7 +108,7 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             return Result.Ok(_mapper.Map<ReadContaDto>(await _contaRepository.FindByIdAsync(id)));
         }
 
-        public async Task<Result<decimal>> GetBalance(int accountNumber)
+        public async Task<Result<decimal>> GetBalanceByAccountNumberAsync(int accountNumber)
         {
             if (!await _contaRepository.AnyByNumberAsync(accountNumber))
             {
@@ -138,6 +138,49 @@ namespace GerenciadorDeContas.ContasBancarias.Services.Implementations
             await _contaRepository.UpdateAsync(_mapper.Map<Conta>(updateContaDto));
 
             return Result.Ok();
+        }
+
+        public async Task<Result<WithDrawResponse>> WithDrawAsync(WithDrawRequest withDrawRequest)
+        {
+            var result = new Result();
+
+            var saldoAnterior = await _contaRepository.GetBalanceByNumberAsync(withDrawRequest.ContaOrigemNumero);
+
+            if (!await _contaRepository.AnyByNumberAsync(withDrawRequest.ContaOrigemNumero))
+            {
+                result.WithError("Conta não existe.");
+            }
+
+            if (withDrawRequest.Valor <= 0)
+            {
+                result.WithError("O valor de saque não pode ser menor ou igual a zero.");
+            }
+
+            if (withDrawRequest.Valor > saldoAnterior)
+            {
+                result.WithError("Não há saldo suficiente para realizar o saque.");
+            }
+
+            if (result.HasError<IError>())
+            {
+                return result;
+            }
+
+            var movimentacao = _mapper.Map<Movimentacao>(withDrawRequest);
+            var contaOrigem = await _contaRepository.FindByNumberAsync(withDrawRequest.ContaOrigemNumero);
+
+            movimentacao.ContaOrigemId = contaOrigem.Id;
+            movimentacao.TipoMovimentacao = TipoMovimentacao.Saque;
+            movimentacao.Horario = DateTime.Now;
+
+            var saldoAtual = await _contaRepository.WithDrawAsync(movimentacao);
+
+            return Result.Ok(new WithDrawResponse
+            {
+                Numero = contaOrigem.Numero,
+                SaldoAnterior = saldoAnterior,
+                SaldoAtual = saldoAtual
+            });
         }
     }
 }

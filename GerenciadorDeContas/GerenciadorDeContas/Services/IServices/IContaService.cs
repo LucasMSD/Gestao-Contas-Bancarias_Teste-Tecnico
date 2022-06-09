@@ -11,6 +11,7 @@ namespace GerenciadorDeContas.ContasBancarias.Services.IServices
         Task<Result> UpdateAsync(UpdateContaDto updateContaDto);
         Task<Result> DeleteAsync(long id);
         Task<Result<DepositResponse>> DepositAsync(DepositRequest depositRequest);
-        Task<Result<decimal>> GetBalance(int accountNumber);
+        Task<Result<decimal>> GetBalanceByAccountNumberAsync(int accountNumber);
+        Task<Result<WithDrawResponse>> WithDrawAsync(WithDrawRequest withDrawRequest);
     }
 }

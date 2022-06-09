@@ -83,7 +83,7 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
         [HttpGet("saldo/{accountNumber}")]
         public async Task<IActionResult> GetBalance(int accountNumber)
         {
-            var result = await _contaService.GetBalance(accountNumber);
+            var result = await _contaService.GetBalanceByAccountNumberAsync(accountNumber);
 
             if (result.IsFailed)
             {
@@ -105,6 +105,19 @@ namespace GerenciadorDeContas.ContasBancarias.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost("saque")]
+        public async Task<IActionResult> WithDraw([FromBody] WithDrawRequest withDrawRequest)
+        {
+            var result = await _contaService.WithDrawAsync(withDrawRequest);
+
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(result.Value);
         }
     }
 }
